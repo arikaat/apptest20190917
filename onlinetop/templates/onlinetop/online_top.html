@@ -1,0 +1,13 @@
+<!-- Top画面 -->
+{% extends "onlinetop/onlinetop_base.html" %}
+{% block content %}
+<p>ようこそ/welcome</p>
+
+
+{% if user.is_authenticated %}
+<P><a class="nav-item nav-link" href="{% url 'onlinetop:membership_top' %}">メインメニューはこちら/Click to Main Menu</a></P>
+{% else %}
+<P><a class="nav-item nav-link" href="{% url 'accounts:login' %}">会員の方はこちらからログインしてください。/Login here for members.</a></P>
+{% endif %}
+
+{% endblock %}

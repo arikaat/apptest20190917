@@ -1,0 +1,26 @@
+<!-- Top画面 -->
+{% extends "accounts/base.html" %}
+{% block content %}
+<p>管理者専用画面です。/Administrator only.</p>
+<table class="table table-bordered table-hover ">
+    <tbody>
+        <tr>
+            <th>E-Mailアドレス/E-Mail Address</th>
+            <th>名前/Full Name</th>
+            <th>会社名/Company</th>
+        </tr> 
+        
+        {% for object in object_list %}
+            <tr>
+                <td>{{ object.email }}</td>
+                <td>{{ object.get_full_name }}</td>
+                <td>{{ object.company.name }}</td>
+            </tr>
+        {% endfor %}
+        
+       
+    </tbody>
+</table>
+
+
+{% endblock %}

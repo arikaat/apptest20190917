@@ -1,0 +1,27 @@
+<!-- Top画面 -->
+{% extends "smtdataconverter/smtdataconverter_base.html" %}
+{% block content %}
+<p>変換実行したファイルのリストです。/List of conversion results.</p>
+<table class="table table-bordered table-hover ">
+    <tbody>
+        <tr>
+            <th>ファイル名/File Name</th>
+            <th>変換結果/conversion results</th>
+        </tr> 
+        
+        {% for object in object_list %}
+            <tr>
+                <td>{{ object.name }}</td>
+                <td>{{ object.upfile }}</td>
+                
+            </tr>
+        {% endfor %}
+        
+       
+    </tbody>
+</table>
+<br>
+<P><a class="nav-item nav-link" href="{% url 'smtdataconverter:smtdataconverter_top' %}">SMT各種データ変換/SMT Data Converter</a></P>
+<P><a class="nav-item nav-link" href="{% url 'onlinetop:membership_top' %}">戻る/Return</a></P>
+
+{% endblock %}

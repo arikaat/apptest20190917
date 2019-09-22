@@ -1,0 +1,12 @@
+<!-- 会員Top画面 -->
+{% extends "onlinetop/onlinetop_base.html" %}
+{% block content %}
+<p>メニューから選択してください。/Please select from the menu.</p>
+{% if membershiplicense %}</p>
+<p>{{username}} </p>
+<p>ライセンス有効。/License available.</p>
+<P><a class="nav-item nav-link" href="{% url 'smtdataconverter:smtdataconverter_top' %}">SMT各種データ変換/SMT Data Converter</a></P>
+{% else %}
+<p>ライセンスなし。/License Unavailable.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,36 @@
+<!-- Top画面 -->
+{% extends "smtdataconverter/smtdataconverter_base.html" %}
+{% block content %}
+<p>SMT関連の各種データを変換します。<br>
+下のTextArea（枠内）にファイルをドラッグアンドドロップしてください。<br>
+Drag and drop the file you want to convert into the bottom frame.</p>
+
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {{ form.media }}<!-- widgets.pyのclass Mediaと関連付け。jsファイル起動する -->
+
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
+            {{ field }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        
+        
+        <button type="submit" class="btn btn-primary btn-lg">送信/Send</button>
+    </form>
+    {% if download_url %}
+        <a href="{{ download_url }}">{{ download_url }}</a>
+    {% endif %}
+    <br>
+
+    {% if result %}
+        {{ result }}
+        {{ msg }}
+    {% endif %}
+
+    <P><a class="nav-item nav-link" href="{% url 'smtdataconverter:convertfile_list' %}">変換データファイルリスト/ConvertFile List</a></P>
+    <P><a class="nav-item nav-link" href="{% url 'onlinetop:membership_top' %}">戻る/Return</a></P>
+{% endblock %}

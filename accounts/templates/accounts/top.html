@@ -1,0 +1,12 @@
+<!-- Top画面 -->
+{% extends "accounts/base.html" %}
+{% block content %}
+{% if user.is_authenticated %}
+<P><a class="nav-item nav-link" href="{% url 'onlinetop:membership_top' %}">メインメニューはこちら/Click to Main Menu</a></P>
+{% else %}
+<p>ログインしてください。/Please Login.</p>
+{% endif %}
+
+
+
+{% endblock %}
