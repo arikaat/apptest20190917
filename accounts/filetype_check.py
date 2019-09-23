@@ -22,7 +22,7 @@ from weakref import WeakValueDictionary
 import pandas as pd     #pandas pip install が必要
 import numpy as np      #numpy pip install が必要
 
-from .forms import ConvertForm, FileUploadForm
+from .forms import TestConvertForm
 from accounts import views as accountsviews
 from .models import DataFile
 

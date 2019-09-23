@@ -5,7 +5,45 @@ from django.contrib.auth.forms import (
     PasswordResetForm, SetPasswordForm
 )
 
+from django.core.files.storage import default_storage
+
+from .models import DataFile
+import sys, os
+
+UPLOADE_DIR = os.path.dirname(os.path.abspath(__file__)) + '/static/files/'
+
 User = get_user_model()
+
+#テスト用20190922
+#ファイル変換form
+class TestConvertForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = DataFile
+        fields = ('upfile',)    #widgetsに指定するときもここに設定忘れずに。field一つでもカンマをつけること！！
+  
+        #fields = ('name', 'dragarea')    #widgetsに指定するときもここに設定忘れずに。field一つでもカンマをつけること！！
+        
+    def clean_upfile(self):
+        __d = self.cleaned_data['upfile']
+        __path = os.path.join(UPLOADE_DIR, __d.name)
+        print(__path)
+
+        return __d
+
+
+
+
+
+
+
+
+
 
 #Login Form
 class LoginForm(AuthenticationForm):

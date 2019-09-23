@@ -29,9 +29,7 @@ from django.conf.urls.static import static
 #各アプリのパスをここに記載すること
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('onlinetop.urls')),      #20190807  smtdataconverter
-    path('accounts/', include('accounts.urls')),      #20190723　ログイン画面表示
-    path('smtdataconverter/', include('smtdataconverter.urls')),      #20190807  smtdataconverter
+    path('', include('accounts.urls')),      #20190723　ログイン画面表示
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

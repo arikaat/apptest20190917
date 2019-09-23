@@ -9,6 +9,27 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.contrib.auth.base_user import BaseUserManager
 
+#テスト用20190922
+#変換するfileのmodel
+class DataFile(models.Model):
+    name = models.CharField(_('file name'), max_length=255,  blank=True)
+    upfile = models.FileField(upload_to='test/',  verbose_name='upload file')
+    #dragarea = models.TextField(_('convert files'), blank=True)
+    
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('ファイル/File')
+        verbose_name_plural = _('ファイル/File')
+
+
+
+
+
+
+
+
 #20190819ここから追加/////////////////////////////////////////////////////////////////////////////////////////////
 #工場名クラス
 class Factory(models.Model):

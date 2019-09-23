@@ -3,16 +3,18 @@ from django.urls import path
 from . import views
 from django.urls import include, path
 
-from smtdataconverter import views as sdc
-
 app_name = 'accounts'
 
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')), #  このアプリ全体の親アドレス
     #以下は子アドレス
     
+    #テスト用20190922
+    path('convert/', views.Convert.as_view(), name='convert'),
+
+
     #Top page 
-    path('top/', views.Top.as_view(), name='top'),          #accounts:top = accounts/top.html
+    path('', views.Top.as_view(), name='top'),          #accounts:top = accounts/top.html
     #ログインとログアウト関連
     path('login/', views.Login.as_view(), name='login'),    #accounts:login = accounts/login.html
     path('logout/', views.Logout.as_view(), name='logout'), #accounts:logout = ログアウト後のジャンプ先htmlへ

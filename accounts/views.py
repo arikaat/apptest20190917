@@ -14,7 +14,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.signing import BadSignature, SignatureExpired, loads, dumps
 from django.core.mail import BadHeaderError, send_mail
-from django.http import Http404, HttpResponseBadRequest
+from django.http import Http404, HttpResponseBadRequest, HttpResponse
 from django.template.loader import render_to_string
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 from django.shortcuts import redirect, resolve_url
@@ -23,13 +23,110 @@ from .forms import (
     MyPasswordResetForm, MySetPasswordForm, EmailChangeForm
 )
 from django.contrib.auth.decorators import login_required
-from .models import User as UserObj
+from django.core.files import File
 
+import pandas as pd     #pandas pip install が必要
+import numpy as np      #numpy pip install が必要
+
+from .models import User as UserObj
+from .forms import TestConvertForm
+from accounts import views as accountsviews
+from accounts.models import User as MyUser
+import sys, os, csv, io
+
+from .models import DataFile
+from .filetype_check import ConvertFile_CheckMain as cls_Check
+UPLOADE_DIR = os.path.dirname(os.path.abspath(__file__)) + '/static/files/'
 
 #get_user_model関数
 #プロジェクト内で使用している
 User = get_user_model()
 #Users = UserObj.objects
+
+#テスト用20190922
+class Convert(LoginRequiredMixin, generic.FormView):
+    model = DataFile
+    template_name = 'accounts/convert.html'
+    success_url = reverse_lazy('accounts:convert')
+    form_class = TestConvertForm
+    __path = ''
+
+    #本来のDataFile入力formのバリデーションOK後の処理。
+    #def form_valid(self, form):        #送信ボタン押すとGetリクエスト？
+        #以降に送信ボタン別の挙動、入力されたmodelに保存処理など。
+    def form_valid(self,form):
+        
+        if self.request.method == "POST":       #自身へのreqoestがPOSTの場合。template内に{% csrf_token %}が必要。
+            
+            file = self.request.FILES['upfile']     #requestから読み込みファイル取得
+            __path = os.path.join(UPLOADE_DIR, 't.txt')   #static/filesフォルダpathとfilenameを結合し、書き込みpath生成
+            #destination = open(__path, 'wb')       #ファイルの書き込み。取得ファイルと同じファイルをstatic/filesに書き込み
+
+
+
+            with open( __path,'wb+') as output:        #fileopen実行 本番環境では要修正と思われる。
+            #   __readarray = file.readlines()
+                for __chunk in file.chunks():
+                    output.write(__chunk)
+
+                output.close
+            
+            with open( __path, 'rt') as __tfile:
+                __readarray = __tfile.readlines()
+
+            __getdata = list()
+            [__getdata.append(__row.strip()) for __row in __readarray ]
+            
+                
+
+            __filename, __exetension = os.path.splitext(__path)
+
+            __checker = cls_Check()
+            __res = __checker.Check_Main(__getdata)       #filecheck結果を取得
+            __log = __checker.get_log()
+            print(__res)
+
+            with open( __path,'wt') as output:        #fileopen実行 本番環境では要修正と思われる。
+                output.write('')
+            output.close
+
+            
+            #os.remove(__path)      #file delete この記述は意味なし。別のボタンイベントと連動させる。どうやってpath取得させるか？
+
+            if(__res):
+
+                __logarray = __log.splitlines()     #改行含む文字列をlistに変換
+                __log2array = np.array(__logarray).reshape(-1, 1).tolist()   #1次元配列を2次元配列へ変換
+                response = HttpResponse('', content_type='text/csv')        #responseへHttpResponseオブジェクトを生成。内容はNULLで
+                response['Content-Disposition'] = 'attachment; filename = "result.csv"'     #ファイルをダウンロードさせたい場合にパラメータ追加
+                writer = csv.writer(response)       #csv.writerオブジェクトに渡す
+                writer.writerows(__log2array)       #2次元配列を一括書き込み。
+
+                return response
+
+        return super().form_valid(form)
+
+   
+
+
+
+
+    #本viewからtemplateへ渡すcontextを上書きするメソッド
+    #ここでは___nameという本class変数を'name'というinputtextのinitialプロパティに渡している。
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)    #元のcontextを呼び出し、次から処理追加。
+        context['form'] = TestConvertForm( 
+            initial = {         #要素の初期表示内容→設定しなおすことで動的に変更可能。
+                #'name': self.___name            #'name' の初期値として___nameを渡す。
+                #'dragarea':"Drop File hire"    #drop処理と競合してしまうので初期値設定不可
+                } 
+            )        
+        return context      #contextを返す＝templateへ渡す。
+
+
+
+
+
 
 #Topページ。認証不要。ログイン要求する。
 #アドレス直下に配置し、最初に表示させる。

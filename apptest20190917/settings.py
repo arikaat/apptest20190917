@@ -26,8 +26,8 @@ SECRET_KEY = '4g^z-%kuo%iaqiide&0c2@yy!6t+pq+##7@b+i+5@wayd!)#yj'
 DEBUG = True
 
 # 20190916 本番用に'.pythonanywhere.com'を追加
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
-#ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 # Application definition
 #20190723　CustomUser用の設定
@@ -38,8 +38,8 @@ AUTH_USER_MODEL = 'accounts.User'
 #ログイン用の画面関連
 #'アプリ名:ページhtmlファイル名'　で指定する
 LOGIN_URL = 'accounts:top'
-LOGIN_REDIRECT_URL = 'onlinetop:membership_top'
-LOGOUT_REDIRECT_URL = 'onlinetop:online_top'
+LOGIN_REDIRECT_URL = 'accounts:top'
+LOGOUT_REDIRECT_URL = 'accounts:top'
 
 #ブラウザを終了させた場合にログアウトさせる=セッションを削除する
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -59,10 +59,7 @@ INSTALLED_APPS = [
     
     #以降　新規アプリ
     'accounts.apps.AccountsConfig',                     #20190723　CustomUser作成用のアプリ。appsはファイル名。
-    'bootstrap4',                                       #20190723　bootstrap4アプリ。pip でのinstall必要。Djangoじゃなくていいらしい。 
-    'widget_tweaks',                                    #20190723　widget_tweaksアプリ。bootstrap4とセット。
-    'smtdataconverter.apps.SmtdataconverterConfig',     #20190807  smtdataconverter
-    'onlinetop.apps.OnlinetopConfig',    
+
 ]
 
 MIDDLEWARE = [

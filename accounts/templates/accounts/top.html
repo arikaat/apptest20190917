@@ -2,7 +2,7 @@
 {% extends "accounts/base.html" %}
 {% block content %}
 {% if user.is_authenticated %}
-<P><a class="nav-item nav-link" href="{% url 'onlinetop:membership_top' %}">メインメニューはこちら/Click to Main Menu</a></P>
+<P><a class="nav-item nav-link" href="{% url 'accounts:convert' %}">ここをクリック/Click here</a></P>
 {% else %}
 <p>ログインしてください。/Please Login.</p>
 {% endif %}

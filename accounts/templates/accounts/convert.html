@@ -1,5 +1,5 @@
 <!-- Top画面 -->
-{% extends "smtdataconverter/smtdataconverter_base.html" %}
+{% extends "accounts/base.html" %}
 {% block content %}
 <p>SMT関連の各種データを変換します。<br>
 下のTextArea（枠内）にファイルをドラッグアンドドロップしてください。<br>
@@ -31,6 +31,5 @@ Drag and drop the file you want to convert into the bottom frame.</p>
         {{ msg }}
     {% endif %}
 
-    <P><a class="nav-item nav-link" href="{% url 'smtdataconverter:convertfile_list' %}">変換データファイルリスト/ConvertFile List</a></P>
-    <P><a class="nav-item nav-link" href="{% url 'onlinetop:membership_top' %}">戻る/Return</a></P>
+    <P><a class="nav-item nav-link" href="{% url 'accounts:top' %}">戻る/Return</a></P>
 {% endblock %}
